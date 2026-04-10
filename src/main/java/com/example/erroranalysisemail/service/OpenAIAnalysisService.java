@@ -177,12 +177,12 @@ public class OpenAIAnalysisService {
     
     private String truncateStackTrace(String stackTrace, int lines) {
         if (stackTrace == null) return "";
-        String[] lines = stackTrace.split("\n");
-        if (lines.length <= lines) return stackTrace;
+        String[] stackTraceLines = stackTrace.split("\n");
+        if (stackTraceLines.length <= lines) return stackTrace;
         
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < lines; i++) {
-            sb.append(lines[i]).append("\n");
+            sb.append(stackTraceLines[i]).append("\n");
         }
         sb.append("... (truncated for analysis)");
         return sb.toString();

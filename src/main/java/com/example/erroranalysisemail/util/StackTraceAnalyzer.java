@@ -105,7 +105,7 @@ public class StackTraceAnalyzer {
         
         List<String> callTypes = Arrays.stream(stackTrace)
             .limit(10)
-            .filter(this::isApplicationCode)
+            .filter(element -> isApplicationCode(element.getClassName()))
             .map(element -> getLayerType(element.getClassName()))
             .distinct()
             .collect(Collectors.toList());
