@@ -91,17 +91,93 @@ public class EmployerLookupDetails {
 
     private static void loadRecessionValues() throws EmployerLookupException {
         try {
+            // Manual exception throwing for validation scenarios
+            
+            // Check if RecessionMapping is null
+            if (RecessionMapping == null) {
+                throw new EmployerLookupException("loadRecessionValues", "RecessionMapping is null", "LOAD_001", null);
+            }
+            
+            // Simulate configuration validation - throw exception if system property is set
+            String simulateError = System.getProperty("simulate.recession.load.error");
+            if ("true".equals(simulateError)) {
+                throw new EmployerLookupException("loadRecessionValues", "Simulated recession loading error triggered", "LOAD_002", null);
+            }
+            
+            // Validate attribute strings before processing
             String lowAttributes = "Oxford university/61222333/Educational Services,Stanfords university/61333444/Educational Services,Prince university/61444555/Educational Services";
-            String mediumAttributes = "Manta wholesale/42222333/Wholesale trade,SaleHoo Wholesale/42444555/Wholesale trade,Mega Wholesale/42555666/Wholesale trade";
+            String mediumAttributes = null;
             String highAttributes = "Pride Industry/31222333/Manufacturing,Williams Industry/31555666/Manufacturing,LLL Industry/32333444/Manufacturing";
             
-            RecessionMapping.put("LOW", lowAttributes);
-            RecessionMapping.put("MEDIUM", mediumAttributes);
-            RecessionMapping.put("HIGH", highAttributes);
+            // Manual validation - throw exception if attributes are empty
+            if (lowAttributes == null || lowAttributes.trim().isEmpty()) {
+                throw new EmployerLookupException("loadRecessionValues", "Low attributes string is null or empty", "LOAD_003", null);
+            }
             
-            log.info("Recession values loaded successfully");
+            if (mediumAttributes == null || mediumAttributes.trim().isEmpty()) {
+                throw new EmployerLookupException("loadRecessionValues", "Medium attributes string is null or empty", "LOAD_004", null);
+            }
+            
+            if (highAttributes == null || highAttributes.trim().isEmpty()) {
+                throw new EmployerLookupException("loadRecessionValues", "High attributes string is null or empty", "LOAD_005", null);
+            }
+            
+            // Simulate memory constraint check
+            Runtime runtime = Runtime.getRuntime();
+            long freeMemory = runtime.freeMemory();
+            long totalMemory = runtime.totalMemory();
+            long usedMemory = totalMemory - freeMemory;
+            
+            // Throw exception if memory usage is above 80%
+            if (usedMemory > (totalMemory * 0.8)) {
+                throw new EmployerLookupException("loadRecessionValues", "Insufficient memory to load recession values", "LOAD_006", null);
+            }
+            
+            // Manual exception for duplicate key check
+            if (RecessionMapping.containsKey("LOW")) {
+                throw new EmployerLookupException("loadRecessionValues", "Duplicate LOW key found in RecessionMapping", "LOAD_007", null);
+            }
+            
+            // Put values with manual exception handling for each operation
+            try {
+                RecessionMapping.put("LOW", "LOW");
+            } catch (Exception e) {
+                throw new EmployerLookupException("loadRecessionValues", "Failed to put LOW value in RecessionMapping", "LOAD_008", e);
+            }
+            
+            try {
+                RecessionMapping.put("MEDIUM", mediumAttributes);
+            } catch (Exception e) {
+                throw new EmployerLookupException("loadRecessionValues", "Failed to put MEDIUM value in RecessionMapping", "LOAD_009", e);
+            }
+            
+            try {
+                RecessionMapping.put("HIGH", highAttributes);
+            } catch (Exception e) {
+                throw new EmployerLookupException("loadRecessionValues", "Failed to put HIGH value in RecessionMapping", "LOAD_010", e);
+            }
+            
+            // Final validation - check if all expected keys are present
+            if (!RecessionMapping.containsKey("LOW") || !RecessionMapping.containsKey("MEDIUM") || !RecessionMapping.containsKey("HIGH")) {
+                throw new EmployerLookupException("loadRecessionValues", "Not all required recession keys were loaded successfully", "LOAD_011", null);
+            }
+            
+            // Simulate data integrity check
+            int expectedSize = 3;
+            if (RecessionMapping.size() != expectedSize) {
+                throw new EmployerLookupException("loadRecessionValues", 
+                    String.format("RecessionMapping size mismatch. Expected: %d, Actual: %d", expectedSize, RecessionMapping.size()), 
+                    "LOAD_012", null);
+            }
+            
+            log.info("Recession values loaded successfully with {} entries", RecessionMapping.size());
+            
+        } catch (EmployerLookupException e) {
+            log.error("EmployerLookupException in loadRecessionValues: {}", e.toString());
+            throw e;
         } catch (Exception e) {
-            throw new EmployerLookupException("loadRecessionValues", "Failed to load recession values", "LOAD_001", e);
+            log.error("Unexpected exception in loadRecessionValues", e);
+            throw new EmployerLookupException("loadRecessionValues", "Unexpected error loading recession values", "LOAD_013", e);
         }
     }
 
