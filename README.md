@@ -1,11 +1,22 @@
 # Error Analysis Email Application
 
-A Spring Boot application for error analysis and email notifications.
+A Spring Boot application for real-time error analysis and email notifications.
 
 ## Prerequisites
 
 - Java 17 or later
 - Maven 3.6 or later
+
+## Email Configuration
+
+The application is pre-configured with Fastmail SMTP settings. Current configuration:
+
+- **SMTP Server**: mail.messagingengine.com
+- **SMTP Port**: 587
+- **Sender**: postmaster@personifyfinancial.com
+- **Recipients**:
+  - kavithas@applieddatafinance.com
+  - kirthikab@applieddatafinance.com
 
 ## Setup
 
@@ -14,14 +25,20 @@ A Spring Boot application for error analysis and email notifications.
    cd D:/ErrorAnalysisEmail
    ```
 
-2. Build the project:
+2. Email configuration is already set in `src/main/resources/application.properties`:
+   ```properties
+   spring.mail.host=mail.messagingengine.com
+   spring.mail.port=587
+   spring.mail.username=postmaster@personifyfinancial.com
+   spring.mail.password=g5d8sjk66j22xq8r
+   exception.alert.recipient=kavithas@applieddatafinance.com,kirthikab@applieddatafinance.com
+   exception.alert.sender=postmaster@personifyfinancial.com
+   ```
+
+3. Build the project:
    ```bash
    mvn clean install
    ```
-
-3. Configure email settings in `src/main/resources/application.properties`:
-   - Update `spring.mail.username` with your email address
-   - Update `spring.mail.password` with your app password
 
 4. Run the application:
    ```bash
@@ -32,6 +49,22 @@ A Spring Boot application for error analysis and email notifications.
 
 - `GET /api/health` - Health check endpoint
 - `GET /api/test` - Test endpoint
+- `GET /api/test-exception?type={runtime|illegal|null}` - Test exception handling (triggers email)
+
+## Exception Email Features
+
+- **Real-time Email Alerts**: Automatically sends detailed exception emails to `kavithas31032000@gmail.com`
+- **Rich HTML Templates**: Professional email formatting with exception details
+- **Async Processing**: Non-blocking email sending to prevent application slowdown
+- **Comprehensive Details**: Includes request body, stack trace, server info, and timestamps
+
+## Email Content Includes
+
+- Service name and server information
+- Request method, URI, and body
+- Exception name and full stack trace
+- Timestamp and severity level
+- Color-coded HTML formatting for readability
 
 ## Running Tests
 
