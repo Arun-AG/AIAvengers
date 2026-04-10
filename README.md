@@ -46,6 +46,11 @@ The application is pre-configured with Fastmail SMTP settings. Current configura
    mvn spring-boot:run
    ```
 
+5. The application runs on:
+   ```text
+   http://localhost:8007
+   ```
+
 ## Enhanced Error Analysis Configuration
 
 The application now includes intelligent error analysis with Git integration and OpenAI-powered analysis. Configure in `src/main/resources/application.properties`:
@@ -56,19 +61,19 @@ error.analysis.enabled=true
 
 # Git Analysis Configuration
 git.analysis.enabled=true
-git.repository.path=/path/to/your/repo  # Optional - auto-detects if empty
+git.repository.path=D:/ErrorAnalysisEmail  # Optional - auto-detects if empty
 git.analysis.days.back=7
 git.ticket.patterns=JIRA-,TICKET-,BUG-,DE-,ISSUE-,TASK-,FEATURE-,HOTFIX-,HACK-
 
 # OpenAI Configuration (Optional)
 openai.enabled=true
-openai.api.key=sk-your-openai-api-key-here
+openai.api.key=
 openai.model=gpt-3.5-turbo
 openai.max.tokens=1000
 openai.timeout.seconds=30
 ```
 
-**Note**: OpenAI integration is optional. If you don't provide an API key, the application will still work with all other features (stack trace analysis, Git correlation, etc.).
+**Note**: OpenAI integration is optional. If you leave the API key empty, the application will still work with all other features (stack trace analysis, Git correlation, etc.). Add your key only in local/private configuration.
 
 ## API Endpoints
 
@@ -105,7 +110,7 @@ openai.timeout.seconds=30
 - **Author Identification**: Shows who last modified the problematic code
 - **Change History**: Displays recent commits (configurable time window, default 7 days)
 
-### 🤖 OpenAI-Powered Analysis (Optional)
+### 🤖 OpenAI-Powered Analysis
 - **Human-Readable Explanations**: Converts technical stack traces into plain English
   - What happened: Simple explanation of the error
   - Root cause: Specific technical reason
@@ -332,6 +337,7 @@ openai.enabled=false
 
 # Enable only OpenAI analysis (disable Git)
 openai.enabled=true
+openai.api.key=
 git.analysis.enabled=false
 
 # Extend Git history search
@@ -342,7 +348,6 @@ git.ticket.patterns=PROJ-,CRM-,API-
 
 # OpenAI Configuration
 openai.enabled=true
-openai.api.key=sk-your-api-key
 openai.model=gpt-4  # Use GPT-4 for better analysis
 openai.max.tokens=2000  # Increase for longer responses
 ```
@@ -353,7 +358,7 @@ If your code spans multiple repositories, configure the main one:
 
 ```properties
 # Point to the primary repository
-git.repository.path=/home/user/projects/main-app
+git.repository.path=D:/projects/main-app
 
 # Or leave empty to auto-detect from current directory
 git.repository.path=
