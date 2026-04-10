@@ -31,8 +31,8 @@ The application is pre-configured with Fastmail SMTP settings. Current configura
    spring.mail.host=mail.messagingengine.com
    spring.mail.port=587
    spring.mail.username=postmaster@personifyfinancial.com
-   spring.mail.password=g5d8sjk66j22xq8r
-   exception.alert.recipient=kavithas@applieddatafinance.com,kirthikab@applieddatafinance.com
+   spring.mail.password=
+   exception.alert.recipient=kavithas@applieddatafinance.com,kirthikab@applieddatafinance.com, arunkumarag@applieddatafinance.com
    exception.alert.sender=postmaster@personifyfinancial.com
    ```
 
@@ -61,7 +61,7 @@ error.analysis.enabled=true
 
 # Git Analysis Configuration
 git.analysis.enabled=true
-git.repository.path=D:/ErrorAnalysisEmail  # Optional - auto-detects if empty
+git.repository.path=  # Optional - auto-detects if empty
 git.analysis.days.back=7
 git.ticket.patterns=JIRA-,TICKET-,BUG-,DE-,ISSUE-,TASK-,FEATURE-,HOTFIX-,HACK-
 
@@ -79,7 +79,34 @@ openai.timeout.seconds=30
 
 - `GET /api/health` - Health check endpoint
 - `GET /api/test` - Test endpoint
-- `GET /api/test-exception?type={runtime|illegal|null}` - Test exception handling (triggers email)
+- `POST /api/loan-check` - Check loan eligibility
+- `GET /api/error` - Trigger a default system failure for exception/email testing
+- `POST /api/employee` - Unified employee endpoint using `action` in the request body
+
+### Employee API Actions
+
+- **`GET_ALL`** - Return all employees
+- **`GET_BY_ID`** - Return a single employee by `id`
+- **`CREATE`** - Create an employee using the `employee` object
+- **`UPDATE`** - Update an employee by `id` using the `employee` object
+- **`DELETE`** - Delete an employee by `id`
+- **`FILTER`** - Filter employees using `filters`
+- **`GET_TEAMS`** - Return the list of teams
+
+### Sample Employee Request Body
+
+```json
+{
+  "action": "FILTER",
+  "filters": {
+    "team": "Engineering",
+    "designation": "Developer",
+    "minSalary": 50000,
+    "maxSalary": 100000,
+    "name": "John"
+  }
+}
+```
 
 ## Enhanced Exception Email Features
 
