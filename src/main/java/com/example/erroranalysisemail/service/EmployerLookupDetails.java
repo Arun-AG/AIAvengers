@@ -1,8 +1,5 @@
-package com.adf.preOfferTest.miniApplicationPage3Test.EmployerLookUp;
+package com.example.erroranalysisemail.service;
 
-import com.adf.Commands.commons.RedisClient;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,11 +9,11 @@ import java.util.Properties;
 
 public class EmployerLookupDetails {
 
-    public static ExtentTest logger;
+    public static Logger logger;
 
-    public static void setLogger(ExtentTest logger) {
+    public static void setLogger(Logger logger) {
         if (logger == null) {
-            throw new IllegalArgumentException("ExtentTest logger cannot be null");
+            throw new IllegalArgumentException("Logger cannot be null");
         }
         EmployerLookupDetails.logger = logger;
     }
@@ -29,6 +26,7 @@ public class EmployerLookupDetails {
     private static Map<String, String> IncomeSource = new HashMap<>();
     private static HashMap<String, String> RecessionMapping = new HashMap<>();
     private static HashMap<String, String> EmpIndustry = new HashMap<>();
+    private static Map<String, String> BailoutStore = new HashMap<>();
     private static final Logger log = LogManager.getLogger();
     
     static {
@@ -321,14 +319,14 @@ public class EmployerLookupDetails {
             
             if (applicableValues.contains(recessionClassification)) {
                 if (logger != null) {
-                    logger.log(Status.FAIL, "RecessionValue = " + recessionClassification + " Is Applicable For IncomeSource = " + incomeSource + "</pre>");
+                    logger.error("RecessionValue = {} Is Applicable For IncomeSource = {}</pre>", recessionClassification, incomeSource);
                 }
                 log.info("RecessionValue {} is applicable for IncomeSource {}", recessionClassification, incomeSource);
             } else {
                 String message = String.format("RecessionValue = %s Is Not Applicable For IncomeSource = %s", recessionClassification, incomeSource);
                 
                 if (logger != null) {
-                    logger.log(Status.FAIL, message + "</pre>");
+                    logger.error("{}</pre>", message);
                 }
                 
                 RecessionException e = new RecessionException(message);
@@ -395,7 +393,8 @@ public class EmployerLookupDetails {
             log.info("Connecting to Redis at URL: {}", redisURL);
             
             try {
-                RedisClient.getRedisClient(environment).setValue(bailOutCounterKey, bailoutCounter);
+                BailoutStore.put(bailOutCounterKey, bailoutCounter);
+                BailoutStore.put(initializerKey, transactionID);
                 log.info("Bailout Cache Key -> {} value -> {}", key, bailoutCounter);
             } catch (Exception redisException) {
                 throw new EmployerLookupException("setEmployerLookupBailout", "Failed to set Redis value", "BAIL_006", redisException);
